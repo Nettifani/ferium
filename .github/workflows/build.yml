@@ -8,8 +8,6 @@ on:
       - "**.rs"
       - ".github/workflows/build.yml"
       - "Cargo.lock"
-      - "Cargo.toml"
-      - "justfile"
   workflow_dispatch:
 
 jobs:
@@ -68,9 +66,11 @@ jobs:
           chmod +x llvm.sh
           sudo ./llvm.sh 14
 
-      - uses: extractions/setup-just@v1
       - name: Lint code
-        run: just lint
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -D clippy::all -D clippy::exit -D clippy::perf -D clippy::cargo -D clippy::style -D clippy::nursery -D clippy::pedantic -D clippy::dbg_macro -D clippy::suspicious -D clippy::unwrap_used -D clippy::complexity -D clippy::create_dir -D clippy::correctness -W clippy::expect_used -A clippy::too-many-lines -A clippy::must-use-candidate -A clippy::multiple-crate-versions
 
       - name: Run tests
         if: matrix.os != 'ubuntu-latest'
@@ -167,7 +167,7 @@ jobs:
           args: --target=x86_64-pc-windows-gnu --release
       - name: Zip Windows GNU output
         if: matrix.os == 'ubuntu-latest'
-        run: zip -r out/ferium-windows-gnu.zip -j target/x86_64-pc-windows-gnu/release/ferium.exe
+         run: zip -r out/ferium-windows-gnu.zip -j target/x86_64-pc-windows-gnu/release/ferium.exe
 
       - name: Upload build artefacts
         uses: actions/upload-artifact@v3
