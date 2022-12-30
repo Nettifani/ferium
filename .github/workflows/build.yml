@@ -167,7 +167,7 @@ jobs:
           args: --target=x86_64-pc-windows-gnu --release
       - name: Zip Windows GNU output
         if: matrix.os == 'ubuntu-latest'
-         run: zip -r out/ferium-windows-gnu.zip -j target/x86_64-pc-windows-gnu/release/ferium.exe
+        run: zip -r out/ferium-windows-gnu.zip -j target/x86_64-pc-windows-gnu/release/ferium.exe
 
       - name: Upload build artefacts
         uses: actions/upload-artifact@v3
